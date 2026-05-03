@@ -11,6 +11,8 @@
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 
+float ratio = 0.2f;
+
 int main()
 {
     glfwInit();
@@ -134,6 +136,8 @@ int main()
 
         shader.use();
 
+        shader.setFloat("ratio", ratio);
+
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
         glActiveTexture(GL_TEXTURE1);
@@ -158,4 +162,20 @@ void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        ratio -= 0.001;
+        if (ratio < 0)
+        {
+            ratio = 0;
+        }
+    }
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        ratio += 0.001;
+        if (ratio > 1)
+        {
+            ratio = 1;
+        }
+    }
 }
