@@ -10,6 +10,8 @@ add_executable(OPENGL_SANDBOX
         external/includes/glad/glad.c
 )
 
+file(COPY ${CMAKE_SOURCE_DIR}/assets DESTINATION ${CMAKE_BINARY_DIR})
+
 target_include_directories(OPENGL_SANDBOX PRIVATE external/includes)
 target_link_directories(OPENGL_SANDBOX PRIVATE external/libraries)
 target_link_libraries(OPENGL_SANDBOX PRIVATE
