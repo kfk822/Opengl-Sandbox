@@ -20,6 +20,8 @@ public:
         std::ifstream vShaderFile;
         std::ifstream fShaderFile;
 
+        int success;
+
         vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
         fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
         try
@@ -40,6 +42,7 @@ public:
         catch (std::ifstream::failure e)
         {
             std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+            std::cin >> success;
         }
 
         const char *vShaderCode = vertexCode.c_str();
@@ -50,7 +53,6 @@ public:
         glShaderSource(vertexShader, 1, &vShaderCode, NULL);
         glCompileShader(vertexShader);
 
-        int success;
         char infolog[512];
         glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
 
@@ -58,6 +60,7 @@ public:
         {
             glGetShaderInfoLog(vertexShader, 512, NULL, infolog);
             std::cout << "ERROR:SHADER:VERTEX:COMPILATION:FAILURE" << infolog << std::endl;
+            std::cin >> success;
         }
 
         unsigned int fragmentShader;
@@ -71,6 +74,7 @@ public:
         {
             glGetShaderInfoLog(fragmentShader, 512, NULL, infolog);
             std::cout << "ERROR:SHADER:FRAGMENT:COMPILATION:FAILURE" << infolog << std::endl;
+            std::cin >> success;
         }
 
         ID = glCreateProgram();
@@ -83,6 +87,7 @@ public:
         {
             glGetProgramInfoLog(ID, 512, NULL, infolog);
             std::cout << "ERROR:SHADER:PROGRAM:LINKING:FAILED" << infolog << std::endl;
+            std::cin >> success;
         }
 
         glDeleteShader(vertexShader);
