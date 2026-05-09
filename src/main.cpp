@@ -183,7 +183,7 @@ int main()
 
         glm::mat4 view = glm::mat4(1.0f);
         glm::mat4 projection = glm::mat4(1.0f);
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+        view = glm::translate(view, glm::vec3(-2.0f, 1.0f, -3.0f));
         projection = glm::perspective(glm::radians(60.0f), (float)width / (float)height, 0.1f, 100.0f);
 
         int viewLoc = glGetUniformLocation(shader.ID, "view");
