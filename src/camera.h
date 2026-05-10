@@ -68,6 +68,8 @@ public:
             Position -= Rigth * velocity;
         if (direction == RIGHT)
             Position += Rigth * velocity;
+
+        Position.y = 0.0f;
     }
 
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
