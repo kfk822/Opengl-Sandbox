@@ -68,8 +68,6 @@ public:
             Position -= Rigth * velocity;
         if (direction == RIGHT)
             Position += Rigth * velocity;
-
-        Position.y = 0.0f;
     }
 
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
@@ -110,6 +108,25 @@ private:
         Front = glm::normalize(front);
         Rigth = glm::normalize(glm::cross(Front, WorldUp));
         Up = glm::normalize(glm::cross(Rigth, Front));
+    }
+
+    glm::mat4 LookAt(glm::vec3 cPosition, glm::vec3 cDirection, glm::vec3 cUp)
+    {
+
+        glm::mat4 M1;
+        glm::mat4 M2;
+
+        M1[0] = glm::vec4(glm::normalize(glm::cross(cUp, cDirection)), 0.0f);
+        M1[1] = glm::vec4(cUp, 0.0f);
+        M1[2] = glm::vec4(cDirection, 0.0f);
+        M1[3] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+        M2[0] = glm::vec4(1.0f, 0.0f, 0.0f, cPosition.x);
+        M2[1] = glm::vec4(0.0f, 1.0f, 0.0f, cPosition.y);
+        M2[2] = glm::vec4(0.0f, 0.0f, 1.0f, cPosition.z);
+        M2[3] = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+        return M1 * M2;
     }
 };
 
