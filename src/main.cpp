@@ -159,7 +159,7 @@ int main()
         model = glm::translate(model, cubePositions[0]);
         ligthShader.setMat4("model", model);
 
-        glm::vec3 ligthPos(2 * cos(glfwGetTime()), 1.0f, 2.0 * sin(glfwGetTime()));
+        glm::vec3 ligthPos(1.2f, 1.0f, 2.0f);
         ligthShader.setVec3("ligthPos", ligthPos);
         ligthShader.setVec3("viewPos", camera.Position);
 
