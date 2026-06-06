@@ -187,6 +187,7 @@ int main()
         ligthSourceShader.setMat4("view", view);
         ligthSourceShader.setMat4("projection", projection);
         ligthSourceShader.setMat4("model", model);
+        ligthSourceShader.setVec3("ligthColor", ligthColor);
 
         glBindVertexArray(ligthVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
