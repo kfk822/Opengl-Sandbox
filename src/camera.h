@@ -12,6 +12,7 @@ enum Camera_Movement
     LEFT,
     RIGHT,
     UP,
+    DOWN,
 };
 
 const float YAW = -90.0f;
@@ -70,9 +71,9 @@ public:
         if (direction == RIGHT)
             Position += Rigth * velocity;
         if (direction == UP)
-        {
             Position += WorldUp * velocity;
-        }
+        if (direction == DOWN)
+            Position -= WorldUp * velocity;
     }
 
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)

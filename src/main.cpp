@@ -130,8 +130,11 @@ int main()
     ligthShader.use();
     glm::vec3 objectcolor = glm::vec3(1.0, 0.5, 0.31);
     ligthShader.setVec3("objectColor", objectcolor);
-    glm::vec3 ligthColor = glm::vec3(1.0, 1.0, 1.0);
-    ligthShader.setVec3("ligthColor", ligthColor);
+    ligthShader.setVec3("material.ambient", glm::vec3(1.0, 0.5, 0.31));
+    ligthShader.setVec3("material.diffuse", glm::vec3(1.0, 0.5, 0.31));
+    ligthShader.setVec3("material.specular", glm::vec3(0.5, 0.5, 0.5));
+    ligthShader.setFloat("material.shininess", 32.0);
+    ligthShader.setVec3("ligth.specular", glm::vec3(1.0, 1.0, 1.0));
 
     while (!glfwWindowShouldClose(window))
     {
@@ -160,8 +163,19 @@ int main()
         ligthShader.setMat4("model", model);
 
         glm::vec3 ligthPos(1.2f, 1.0f, 2.0f);
-        ligthShader.setVec3("ligthPos", ligthPos);
+        ligthShader.setVec3("ligth.position", ligthPos);
         ligthShader.setVec3("viewPos", camera.Position);
+
+        glm::vec3 ligthColor;
+        ligthColor.x = sin(glfwGetTime() * 2.0f);
+        ligthColor.y = sin(glfwGetTime() * 0.7f);
+        ligthColor.z = sin(glfwGetTime() * 1.3f);
+
+        glm::vec3 diffuseColor = ligthColor * glm::vec3(0.5);
+        glm::vec3 ambientColor = ligthColor * glm::vec3(0.2);
+
+        ligthShader.setVec3("ligth.ambient", ambientColor);
+        ligthShader.setVec3("ligth.diffuse", diffuseColor);
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -206,9 +220,9 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-    {
         camera.ProcessKeyboard(UP, deltaTime);
-    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        camera.ProcessKeyboard(DOWN, deltaTime);
 }
 
 void mouse_callback(GLFWwindow *window, double xposIn, double yposIn)
