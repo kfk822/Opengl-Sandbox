@@ -130,11 +130,13 @@ int main()
     ligthShader.use();
     glm::vec3 objectcolor = glm::vec3(1.0, 0.5, 0.31);
     ligthShader.setVec3("objectColor", objectcolor);
-    ligthShader.setVec3("material.ambient", glm::vec3(1.0, 0.5, 0.31));
-    ligthShader.setVec3("material.diffuse", glm::vec3(1.0, 0.5, 0.31));
+    ligthShader.setVec3("material.ambient", glm::vec3(0, 0.1, 0.06));
+    ligthShader.setVec3("material.diffuse", glm::vec3(0.0, 0.51, 0.51));
     ligthShader.setVec3("material.specular", glm::vec3(0.5, 0.5, 0.5));
     ligthShader.setFloat("material.shininess", 32.0);
     ligthShader.setVec3("ligth.specular", glm::vec3(1.0, 1.0, 1.0));
+    ligthShader.setVec3("ligth.ambient", glm::vec3(1.0, 1.0, 1.0));
+    ligthShader.setVec3("ligth.diffuse", glm::vec3(1.0, 1.0, 1.0));
 
     while (!glfwWindowShouldClose(window))
     {
@@ -166,17 +168,6 @@ int main()
         ligthShader.setVec3("ligth.position", ligthPos);
         ligthShader.setVec3("viewPos", camera.Position);
 
-        glm::vec3 ligthColor;
-        ligthColor.x = sin(glfwGetTime() * 2.0f);
-        ligthColor.y = sin(glfwGetTime() * 0.7f);
-        ligthColor.z = sin(glfwGetTime() * 1.3f);
-
-        glm::vec3 diffuseColor = ligthColor * glm::vec3(0.5);
-        glm::vec3 ambientColor = ligthColor * glm::vec3(0.2);
-
-        ligthShader.setVec3("ligth.ambient", ambientColor);
-        ligthShader.setVec3("ligth.diffuse", diffuseColor);
-
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         model = glm::mat4(1.0f);
@@ -187,7 +178,7 @@ int main()
         ligthSourceShader.setMat4("view", view);
         ligthSourceShader.setMat4("projection", projection);
         ligthSourceShader.setMat4("model", model);
-        ligthSourceShader.setVec3("ligthColor", ligthColor);
+        ligthSourceShader.setVec3("ligthColor", glm::vec3(1.0, 1.0, 1.0));
 
         glBindVertexArray(ligthVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
