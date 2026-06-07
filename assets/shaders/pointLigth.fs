@@ -6,12 +6,13 @@ struct Material{
 };
 struct Ligth{
     vec3 position;
-    vec3 direction;
-    float cutOff;
-    float outerCutOff;
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+
+    float constant;
+    float linear;
+    float quadratic;
 };
 
 in vec2 TexCoords;
@@ -27,16 +28,13 @@ uniform Ligth ligth;
 
 void main()
 {
-    vec3 ligthDir = normalize(ligth.position - FragPos);
-    float theta = dot(ligthDir,normalize(-ligth.direction));
-    float epsilon = ligth.cutOff - ligth.outerCutOff;
-    float intensity = clamp((theta - ligth.outerCutOff) / epsilon,0.0,1.0);
+    float distance = length(ligth.position - FragPos);
+    float attenuation = 1.0/(ligth.constant + ligth.linear * distance +ligth.quadratic * (distance * distance));
 
     vec3 ambient = vec3(texture(material.diffuse,TexCoords))* ligth.ambient;
 
-
     vec3 norm = normalize(Normal);
-
+    vec3 ligthDir = normalize(ligth.position - FragPos);
     float diff = max(dot(norm,ligthDir),0.0);
     vec3 diffuse = vec3(texture(material.diffuse,TexCoords)) * diff * ligth.diffuse;
     
@@ -45,10 +43,10 @@ void main()
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = vec3(texture(material.specular, TexCoords)) * spec * ligth.specular;
 
-    diffuse  *= intensity;
-    specular *= intensity;
+    ambient *= attenuation;
+    diffuse *= attenuation;
+    specular*= attenuation;
 
     vec3 result = ambient + diffuse + specular;
     FragColor = vec4(result, 1.0);
-    
 }

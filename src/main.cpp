@@ -126,7 +126,16 @@ int main()
     glEnableVertexAttribArray(0);
 
     glm::vec3 cubePositions[] = {
-        glm::vec3(0.0f, 0.0f, 0.0f)};
+        glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(2.0f, 5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3(2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f, 3.0f, -7.5f),
+        glm::vec3(1.3f, -2.0f, -2.5f),
+        glm::vec3(1.5f, 2.0f, -2.5f),
+        glm::vec3(1.5f, 0.2f, -1.5f),
+        glm::vec3(-1.3f, 1.0f, -1.5f)};
 
     Shader ligthShader = Shader("assets/shaders/vertexShader.vs", "assets/shaders/fragmentShader.fs");
     Shader ligthSourceShader = Shader("assets/shaders/vertexShader.vs", "assets/shaders/ligthingfragment.fs");
@@ -205,12 +214,13 @@ int main()
         ligthShader.setMat4("projection", projection);
 
         glBindVertexArray(VAO);
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, cubePositions[0]);
-        ligthShader.setMat4("model", model);
 
         glm::vec3 ligthPos(1.2f, 1.0f, 2.0f);
-        ligthShader.setVec3("ligth.position", ligthPos);
+        ligthShader.setVec3("ligth.position", camera.Position);
+        ligthShader.setVec3("ligth.direction", camera.Front);
+        ligthShader.setFloat("ligth.cutOff", glm::cos(glm::radians(12.5f)));
+        ligthShader.setFloat("ligth.outerCutOff", glm::cos(glm::radians(17.5f)));
+
         ligthShader.setVec3("viewPos", camera.Position);
 
         glm::vec3 diffuseColor = glm::vec3(0.5);
@@ -219,7 +229,18 @@ int main()
         ligthShader.setVec3("ligth.ambient", ambientColor);
         ligthShader.setVec3("ligth.diffuse", diffuseColor);
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glm::mat4 model = glm::mat4(1.0);
+
+        for (unsigned int i = 0; i < 10; i++)
+        {
+
+            model = glm::translate(model, cubePositions[i]);
+            float angle = 20.0 * i;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0, 0.3, 0.5));
+            ligthShader.setMat4("model", model);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
         model = glm::mat4(1.0f);
         model = glm::translate(model, ligthPos);
